@@ -1,0 +1,32 @@
+#!/usr/bin/bash
+
+# dmenu_path | dmenu "$@" | ${SHELL:-"/bin/sh"} &
+
+set -o errexit
+
+HISTORY="$HOME/.drun_history"
+test -f "$HISTORY" || touch "$HISTORY"
+INPUT=$(dmenu $@ < "$HISTORY")
+test -n "$INPUT"
+
+# aliases
+case "$INPUT" in
+    chrome)
+        CMD="google-chrome-stable" ;;
+    android-studio)
+        CMD="~/apps/android-studio/bin/studio.sh" ;;
+    *)
+        CMD="$INPUT" ;;
+esac
+
+# test if CMD exist in $PATH
+hash $(echo "$CMD" | cut -f1 -d ' ')
+
+# write input to history
+if ! grep -q "$INPUT" "$HISTORY"; then
+    echo "$INPUT" >> "$HISTORY"
+    sort "$HISTORY" -o "$HISTORY" &
+fi
+
+exec $CMD
+

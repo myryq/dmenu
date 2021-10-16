@@ -1,0 +1,6 @@
+sudo dnf install -y libX11-devel.x86_64 libXinerama-devel.x86_64 libXft-devel.x86_64
+
+sudo make clean install
+
+bindkeys xfce: settings -> keyboard -> applications -> add
+dmenu_run -y 450 -x 450 -w 1000 -dim 0.5 -l 10 -fn 'Monospace-20:normal'
